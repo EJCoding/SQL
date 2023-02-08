@@ -1,0 +1,30 @@
+--Create a Store database
+CREATE table store (id INTEGER PRIMARY KEY, item TEXT, section TEXT, quantity INTEGER, price INTEGER);
+
+INSERT INTO store VALUES (1, "Yuta Okkotsu", "anime figurine", 3, 50.99);
+INSERT INTO store VALUES (2, "Zhongli", "figurine", 4, 75.99);
+INSERT INTO store VALUES (3, "Hu Tao", "figurine", 4, 75.99);
+INSERT INTO store VALUES (4, "Hanako-kun", "figurine", 3, 45.99);
+INSERT INTO store VALUES (5, "Killua", "figurine", 5, 50.99);
+INSERT INTO store VALUES (6, "Kaiju No.8", "manga", 10, 9.99);
+INSERT INTO store VALUES (7, "Princess Jellyfish", "manga", 5, 7.99);
+INSERT INTO store VALUES (8, "One Piece", "manga", 20, 9.99);
+INSERT INTO store VALUES (9, "Pocky", "snacks", 14, 5.99);
+INSERT INTO store VALUES (10, "Chocoroom", "snacks", 12, 3.99);
+INSERT INTO store VALUES (11, "Seaweed Chips", "snacks", 5, 2.99);
+INSERT INTO store VALUES (12, "Calpico", "drinks", 11, 1.99);
+INSERT INTO store VALUES (13, "Green Tea", "drinks", 11, 2.99);
+INSERT INTO store VALUES (14, "Washi Tape", "stationary", 20, 0.99);
+INSERT INTO store VALUES (15, "Stickers", "stationary", 17, 0.59);
+
+--Display the database ordered by price:
+ SELECT * FROM store ORDER BY price;
+ 
+ --Average price of items in manga section:
+ SELECT ROUND(AVG(price), 2) as "Average Price of Manga" FROM store WHERE section = "manga";
+ 
+ --Total amount of items in figurine section:
+ SELECT SUM(quantity) as "Total Figurines in Stock" FROM store WHERE section = "figurine";
+ 
+ --Most Expensive item in store:
+ SELECT item, section, MAX(price) as "price" FROM store;
