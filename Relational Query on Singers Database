@@ -1,0 +1,75 @@
+--Table containing singer names & debut date
+CREATE TABLE singers (id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    debut_date TEXT);    
+INSERT INTO singers (name, debut_date) VALUES ("ATEEZ", "2018-10-24");
+INSERT INTO singers (name, debut_date) VALUES ("MONSTA X", "2015-05-14");
+INSERT INTO singers (name, debut_date) VALUES ("SEVENTEEN", "2015-05-26");
+INSERT INTO singers (name, debut_date) VALUES ("ONE OK ROCK", "2007-04-24");
+INSERT INTO singers (name, debut_date) VALUES ("Reol", "2016-10-16");
+INSERT INTO singers (name, debut_date) VALUES ("Eve", "2014-07-17");
+INSERT INTO singers (name, debut_date) VALUES ("Fall Out Boy", "2003-05-05");
+INSERT INTO singers (name, debut_date) VALUES ("iyla", "2018-10-12");
+INSERT INTO singers (name, debut_date) VALUES ("Rina Sawayama", "2013-02-02");
+
+--Table containing singers home country
+CREATE TABLE country (id INTEGER PRIMARY KEY AUTOINCREMENT,
+    singer_id INTEGER,
+    name TEXT);
+INSERT INTO country (singer_id, name) VALUES (1, "South Korea");
+INSERT INTO country (singer_id, name) VALUES (2, "South Korea");
+INSERT INTO country (singer_id, name) VALUES (3, "South Korea");
+INSERT INTO country (singer_id, name) VALUES (4, "Japan");
+INSERT INTO country (singer_id, name) VALUES (5, "Japan");
+INSERT INTO country (singer_id, name) VALUES (6, "Japan");
+INSERT INTO country (singer_id, name) VALUES (7, "USA");
+INSERT INTO country (singer_id, name) VALUES (8, "USA");
+INSERT INTO country (singer_id, name) VALUES (9, "UK");
+
+--Table containing music genre of singers
+CREATE TABLE genre (id INTEGER PRIMARY KEY AUTOINCREMENT,
+    singer_id INTEGER,
+    genre_type TEXT);
+INSERT INTO genre (singer_id, genre_type) VALUES (1, "KPOP");
+INSERT INTO genre (singer_id, genre_type) VALUES (2, "KPOP");
+INSERT INTO genre (singer_id, genre_type) VALUES (3, "KPOP");
+INSERT INTO genre (singer_id, genre_type) VALUES (4, "J-ROCK");
+INSERT INTO genre (singer_id, genre_type) VALUES (5, "Electronic");
+INSERT INTO genre (singer_id, genre_type) VALUES (6, "JPOP");
+INSERT INTO genre (singer_id, genre_type) VALUES (7, "Rock");
+INSERT INTO genre (singer_id, genre_type) VALUES (8, "Hip-Hop");
+INSERT INTO genre (singer_id, genre_type) VALUES (9, "Pop");
+
+--Table containing song(s) by singers and current views on that song's music video
+CREATE TABLE songs (id INTEGER PRIMARY KEY AUTOINCREMENT,
+    singer_id INTEGER,
+    song_name TEXT,
+    current_views INTEGER);
+INSERT INTO songs (singer_id, song_name, current_views) VALUES (1, "Pirate King", 41000000);
+INSERT INTO songs (singer_id, song_name, current_views) VALUES (1, "Guerilla", 24000000);
+INSERT INTO songs (singer_id, song_name, current_views) VALUES (2, "Hero", 129000000);
+INSERT INTO songs (singer_id, song_name, current_views) VALUES (2, "LOVE", 29000000); 
+INSERT INTO songs (singer_id, song_name, current_views) VALUES (3, "Adore U", 11000000);
+INSERT INTO songs (singer_id, song_name, current_views) VALUES (4, "Naihishinsho", 66000000);
+INSERT INTO songs (singer_id, song_name, current_views) VALUES (5, "Give me a break Stop now", 19000000);
+INSERT INTO songs (singer_id, song_name, current_views) VALUES (6, "Demon Dance Tokyo", 22000000);
+INSERT INTO songs (singer_id, song_name, current_views) VALUES (7, "Sugar, We're Goin Down", 126000000);
+INSERT INTO songs (singer_id, song_name, current_views) VALUES (8, "Juice", 9000000);
+INSERT INTO songs (singer_id, song_name, current_views) VALUES (9, "Sleeping in Waking", 150000);
+
+--Returning records from singer table to matches from the country table
+SELECT singers.name as "Name", singers.debut_date as "Debut Date", country.name as "Home Country" FROM singers
+    LEFT JOIN country
+    ON singers.id = country.singer_id
+GROUP BY singers.name;
+
+--Left Join of singers table and genre table with "singer_id" being the commonality
+SELECT singers.name as "Name", genre.genre_type as "Music Genre" FROM singers
+    LEFT JOIN genre
+    ON singers.id = genre.id;
+ 
+ --Inner Join of singers table and songs matching values in both tables
+SELECT singers.name as "Name", songs.song_name as "Song Title", songs.current_views as "Current Music Video Views" FROM singers
+     JOIN songs
+     ON singers.id = songs.singer_id
+ORDER BY songs.current_views;
