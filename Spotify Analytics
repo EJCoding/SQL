@@ -1,0 +1,92 @@
+# For this project, I downloaded Spotify data from Kaggle.
+# Then I created a table to insert Spotify data into.
+# Finally, I performed analytics on the data using SQL. 
+
+CREATE TABLE BIT_DB.Spotifydata (
+id integer PRIMARY KEY,
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL,
+popularity integer NOT NULL,
+danceability decimal(4,3) NOT NULL,
+energy decimal(4,3) NOT NULL,
+song_key integer NOT NULL,
+loudness decimal(5,3) NOT NULL,
+song_mode integer NOT NULL,
+speechiness decimal(5,4) NOT NULL,
+acousticness decimal(6,5) NOT NULL,
+instrumentalness text NOT NULL,
+liveness decimal(5,4) NOT NULL,
+valence decimal(4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL );
+
+#Then I inserted the Spotify Data .csv into the table.
+
+#Next, I explored the data using the following SQL. 
+
+#First,  I wanted to see all fields in the table to see all the information I was working with. 
+SELECT* FROM BIT_DB.Spotifydata;
+
+#Then I wanted to know how many songs and how many artists there were. 
+SELECT Count(track_name) AS 'Number of Songs', COUNT(DISTINCT artist_name) AS 'Number of Artist' FROM BIT_DB.Spotifydata;
+
+#I determined the avg popularity, danceability, and energy by artist and track. 
+SELECT artist_name, track_name, avg(popularity), avg(danceability), avg(energy) FROM BIT_DB.Spotifydata
+GROUP BY artist_name, track_name;
+
+#Found the top 10 artists based on popularity. 
+SELECT artist_name, popularity FROM BIT_DB.Spotifydata
+ORDER BY popularity desc LIMIT 10; 
+
+#Found the Least popular song. 
+SELECT artist_name, track_name, min(popularity) FROM BIT_DB.Spotifydata;
+
+#Determined which song ran the longest. 
+SELECT artist_name, track_name, max(duration_ms) FROM BIT_DB.Spotifydata;
+
+#As well as which song ran the shortest. 
+SELECT artist_name, track_name, min(duration_ms) FROM BIT_DB.Spotifydata;
+
+#Determined the average danceability for the 10 most popular songs. 
+SELECT track_name, artist_name, popularity, avg(danceability) FROM BIT_DB.Spotifydata
+GROUP BY track_name, artist_name
+Order By popularity desc LIMIT 10; 
+
+#Explored which song had the fastest tempo. 
+SELECT track_name, artist_name, max(tempo) FROM BIT_DB.Spotifydata;
+
+#And which song had the slowest tempo. 
+SELECT track_name, artist_name, min(tempo) FROM BIT_DB.Spotifydata;
+
+#When I was looking at the results of seeing all fields, I noticed Doja Cat was listed quite a few times. So I decided to find how many songs she had in this table. 
+SELECT count(track_name) FROM BIT_DB.Spotifydata
+WHERE artist_name = 'Doja Cat';
+
+#Then I wanted to see the titles of Doja Cat's songs. 
+SELECT track_name, popularity, tempo, duration_ms FROM BIT_DB.Spotifydata
+WHERE artist_name = 'Doja Cat'
+ORDER BY popularity desc; 
+
+#Based on my finding with Doja Cat, I wanted to see how many songs each artist in the table had. 
+SELECT artist_name, count(track_name) FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+ORDER BY count(track_name) desc; 
+
+#Then I was curious to know how many songs had a similar song key. 
+SELECT artist_name, track_name, song_key FROM BIT_DB.Spotifydata
+GROUP BY id
+ORDER BY song_key desc; 
+
+#Lastly, I was curious as to what "Valence" meant. So I googled the word based off of how Spotify defined it. 
+#"Spotify uses the word “valence” to measure whether a song is likely to make someone feel happy (higher valence) or sad (lower valence). The metric is measured on a scale from 0.0 to 1.0."
+#I then proceeded to categorize songs into "Positive Song", "Neutral Song", and "Negative Song" based on the song's valence. 
+SELECT artist_name, track_name, valence,
+CASE
+    WHEN valence >= 0.5 THEN 'Positive Song'
+    WHEN valence < 0.5 and valence > 0.35 THEN 'Neutral Song'
+    ELSE 'Negative Song'
+END AS Musical_Positiveness
+FROM BIT_DB.Spotifydata
+ORDER BY valence desc;
